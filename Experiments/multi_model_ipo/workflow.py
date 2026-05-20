@@ -4,6 +4,8 @@ from Experiments.multi_model_ipo.miscellaneous.order_verification import *
 from Experiments.multi_model_ipo.miscellaneous.csv_conversion import *
 from libb.other.parse import parse_json
 import pandas as pd
+from dotenv import load_dotenv
+load_dotenv()
 
 # TODO: yfinance network failures in codespace environment causing IPO date + shares outstanding lookups to fail
 # TODO: Polygon fallback also failing for very recent IPOs (PAYP, MMED, NHP) — tickers not resolving
@@ -14,13 +16,14 @@ MODELS = ["deepseek", "gpt-4.1"]
 
 TODAY = pd.Timestamp.now().date()
 
-
 def weekly_flow(date):
+
+    prompt_skeleton = assemble_deep_research_prompt_skeleton()
 
     for model in MODELS:
         libb = LIBBmodel(f"Experiments/multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
-        deep_research_report, prompt = prompt_deep_research(libb)
+        deep_research_report, prompt = prompt_deep_research(libb, prompt_skeleton)
         libb.save_prompt(prompt)
         libb.save_deep_research(deep_research_report)
 
@@ -35,10 +38,13 @@ def weekly_flow(date):
     return
 
 def daily_flow(date):
+
+    skeleton = assemble_daily_prompt_skeleton()
+
     for model in MODELS:
         libb = LIBBmodel(f"Experiments/multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
-        daily_report, prompt = prompt_daily_report(libb)
+        daily_report, prompt = prompt_daily_report(libb, skeleton)
         libb.save_prompt(prompt)
         libb.analyze_sentiment(daily_report)
         libb.save_daily_update(daily_report)
@@ -67,8 +73,9 @@ def main():
 
 def main():
     # TODO: REPLACE FILLER DATE IN PROMPTS
-    start_date = pd.Timestamp("2026-01-28")
-    for i in range(20):
+    # TODO: ADD REAL DATE
+    start_date = pd.Timestamp("2026-05-18")
+    for i in range(1):
         run_date = start_date + pd.Timedelta(days=i)    
         day_num = run_date.weekday()
 
