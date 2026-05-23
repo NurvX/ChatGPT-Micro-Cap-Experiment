@@ -2,6 +2,7 @@ import pandas as pd
 
 from ..prompt_orchestration.get_prompt_data import get_macro_news, build_eligibility_series
 from libb.model import LIBBmodel
+import collections
 
 # -------------------------------------------------------------------
 # SYSTEM PROMPT
@@ -299,9 +300,7 @@ def assemble_daily_prompt_skeleton():
         + TRADING_CADENCE
         + UNIVERSE_RULES
         + INPUT_BLOCK
-        + GIVEN_DATA.format(
-            MACRO_NEWS=macro_news,
-        )
+        + GIVEN_DATA.format_map(collections.defaultdict(str, {"MACRO_NEWS": macro_news}))
         + ORDER_SPEC_FORMAT
         + "\n"
         + OUTPUT_REQUIREMENTS

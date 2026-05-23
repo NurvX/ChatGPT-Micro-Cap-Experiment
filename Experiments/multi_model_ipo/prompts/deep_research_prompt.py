@@ -2,6 +2,7 @@ import pandas as pd
 
 from ..prompt_orchestration.get_prompt_data import *
 from libb.model import LIBBmodel
+import collections
 
 
 # -------------------------------------------------------------------
@@ -298,13 +299,10 @@ def assemble_deep_research_prompt_skeleton() -> str:
         + TRADING_CADENCE
         + UNIVERSE_RULES
         + INPUT_BLOCK
-        + GIVEN_DATA.format(
-            MACRO_NEWS=macro_news,
-            IPO_UNIVERSE=formatted_ipo_universe,
-            IPO_TICKER_ELIGIBILITY=ipo_universe_eligibility,
-
-
-        )
+        + GIVEN_DATA.format_map(collections.defaultdict(str, {"MACRO_NEWS": macro_news,
+            "IPO_UNIVERSE": formatted_ipo_universe,
+            "IPO_TICKER_ELIGIBILITY": ipo_universe_eligibility,
+        }))
         + ORDER_SPEC_FORMAT
         + "\n"
         + OUTPUT_REQUIREMENTS
