@@ -13,9 +13,8 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from utilities import *
-from fetching import *
-from config import *
+from .utilities import *
+from .fetching import *
 
 from dotenv import load_dotenv
 load_dotenv()
