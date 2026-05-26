@@ -823,9 +823,9 @@ def _get_rejection_reasons(
         age_days = _days_since(ipo_date, TODAY)
         if age_days is not None:
             age_years = age_days / 365.25
-            if age_years < IPO_LOCKOUT_YEARS:
+            if age_years > IPO_LOCKOUT_YEARS:
                 reasons.append(
-                    f"IPO too recent ({age_years:.1f} yrs < {IPO_LOCKOUT_YEARS})"
+                    f"IPO too old ({age_years:.1f} yrs > {IPO_LOCKOUT_YEARS})"
                 )
     else:
         reasons.append("IPO date unknown — cannot verify age")
