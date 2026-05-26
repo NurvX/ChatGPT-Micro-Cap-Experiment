@@ -838,6 +838,8 @@ def _get_rejection_reasons(
         reasons.append(
             f"market cap too low (${market_cap:,.0f} < ${MINIMUM_MARKET_CAP:,.0f})"
         )
+    elif market_cap == 0.0:
+        reasons.append("Market cap unknown")
 
     return reasons
 
