@@ -301,7 +301,7 @@ def _get_rejection_reasons(
 def filter_orders(
     orders: dict,
     max_workers: int = 8,
-) -> tuple[list[dict] | None, list[dict] | None]:
+) -> tuple[dict| None, list[dict] | None]:
     order_list = orders.get("orders", [])
 
     filtered_orders = []
@@ -328,7 +328,7 @@ def filter_orders(
 
     with ThreadPoolExecutor(max_workers=max_workers) as ex:
         futures = []
-        for order in orders:
+        for order in order_list:
             future = ex.submit(_process_order, order)
             futures.append(future)
     
@@ -338,6 +338,9 @@ def filter_orders(
                 rejected_orders.append(order)
             else:
                 filtered_orders.append(order)
+
+        filtered_orders = {"orders": filtered_orders}
+
     return filtered_orders, rejected_orders
 
 
