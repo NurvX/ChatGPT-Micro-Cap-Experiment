@@ -300,7 +300,7 @@ def _get_rejection_reasons(
 
 def filter_orders(
     orders: dict,
-    max_workers: int = 8,
+    max_workers: int = 5,
 ) -> tuple[dict| None, list[dict] | None]:
     order_list = orders.get("orders", [])
 
