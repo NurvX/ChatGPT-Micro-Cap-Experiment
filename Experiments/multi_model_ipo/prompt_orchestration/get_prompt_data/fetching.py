@@ -61,6 +61,9 @@ def get_ipos(start: str, end: str):
     ipo for ipo in data
     if ipo.get("actions") == "Priced"
     and ipo.get("exchange") in {"NASDAQ", "NYSE", "AMEX", "NYSE ARCA", "NYSE MKT"}
+    and not looks_like_spac(ipo.get("name"), "")
+    and not looks_shellish(ipo.get("name"), "")
+
 ]
 
     return ipos
