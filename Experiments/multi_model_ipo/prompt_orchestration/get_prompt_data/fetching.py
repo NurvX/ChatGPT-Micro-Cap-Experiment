@@ -191,6 +191,9 @@ def enrich_company(ticker: str):
 
     if looks_shellish(name, description):
         return None
+    
+    if not details["profile"].get("isActivelyTrading", False):
+        return None
 
     market = get_market_data(ticker)
 
