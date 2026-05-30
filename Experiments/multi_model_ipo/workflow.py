@@ -23,7 +23,7 @@ def weekly_flow(date):
     prompt_skeleton = assemble_deep_research_prompt_skeleton()
 
     for model in MODELS:
-        libb = LIBBmodel(f"Experiments/multi_model_ipo/artifacts/{model}", run_date=date)
+        libb = LIBBmodel(f"multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
         deep_research_report, prompt = prompt_deep_research(prompt_skeleton, libb)
         libb.save_prompt(prompt)
@@ -45,7 +45,7 @@ def daily_flow(date):
     prompt_skeleton = assemble_daily_prompt_skeleton()
 
     for model in MODELS:
-        libb = LIBBmodel(f"Experiments/multi_model_ipo/artifacts/{model}", run_date=date)
+        libb = LIBBmodel(f"multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
         daily_report, prompt = prompt_daily_report(prompt_skeleton, libb)
         libb.save_prompt(prompt)
@@ -70,7 +70,7 @@ def starting_flow(date):
     prompt = create_starting_prompt()
 
     for model in MODELS:
-        libb = LIBBmodel(f"Experiments/multi_model_ipo/artifacts/{model}", run_date=date)
+        libb = LIBBmodel(f"multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
         starting_report, prompt = prompt_starting_report(prompt, libb)
         libb.save_prompt(prompt)

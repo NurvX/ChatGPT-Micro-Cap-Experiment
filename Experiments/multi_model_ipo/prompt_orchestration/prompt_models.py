@@ -46,7 +46,7 @@ def prompt_chatgpt(text: str, model: str = "gpt-4.1-mini") -> str:
 
 def prompt_deep_research(skeleton, libb) -> tuple[str, str]:
 
-    model = libb._model_path.replace("Experiments/multi_model_ipo/artifacts/", "")
+    model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
     text = create_deep_research_prompt(skeleton, libb)
         
     if model == "deepseek":
@@ -58,7 +58,7 @@ def prompt_deep_research(skeleton, libb) -> tuple[str, str]:
 
 def prompt_daily_report(skeleton, libb) -> tuple[str, str]:
 
-    model = libb._model_path.replace("Experiments/multi_model_ipo/artifacts/", "")
+    model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
     text = create_daily_prompt(skeleton, libb)
     if model == "deepseek":
         return prompt_deepseek(text), text
@@ -69,7 +69,7 @@ def prompt_daily_report(skeleton, libb) -> tuple[str, str]:
     
 def prompt_starting_report(prompt: str, libb: LIBBmodel):
 
-    model = libb._model_path.replace("Experiments/multi_model_ipo/artifacts/", "")
+    model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
 
     if model == "deepseek":
         return prompt_deepseek(prompt), prompt
