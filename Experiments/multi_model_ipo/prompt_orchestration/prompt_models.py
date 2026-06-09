@@ -72,8 +72,8 @@ def prompt_starting_report(prompt: str, libb: LIBBmodel):
     model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
 
     if model == "deepseek":
-        return prompt_deepseek(prompt), prompt
+        return prompt_deepseek(prompt)
     elif model == "gpt-4.1":
-        return prompt_chatgpt(prompt), prompt
+        return prompt_chatgpt(prompt)
     else:
         raise RuntimeError(f"Unidentified model: {model}")

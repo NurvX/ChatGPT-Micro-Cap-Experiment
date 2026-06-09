@@ -72,7 +72,7 @@ def starting_flow(date):
     for model in MODELS:
         libb = LIBBmodel(f"multi_model_ipo/artifacts/{model}", run_date=date)
         libb.process_portfolio()
-        starting_report, prompt = prompt_starting_report(prompt, libb)
+        starting_report = prompt_starting_report(prompt, libb)
         libb.save_prompt(prompt)
         libb.analyze_sentiment(starting_report, report_type="starting_report")
         libb.save_deep_research(starting_report)
