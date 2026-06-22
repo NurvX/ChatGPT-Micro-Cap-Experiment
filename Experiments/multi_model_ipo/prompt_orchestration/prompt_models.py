@@ -44,6 +44,26 @@ def prompt_chatgpt(text: str, model: str = "gpt-4.1-mini") -> str:
 
     return content
 
+def prompt_claude(text: str, model: str) -> str:
+
+    client = anthropic.Anthropic()
+    client.api_key = os.environ["CLAUDE_API_KEY"]
+
+    message = client.messages.create(
+    model=model,
+    max_tokens=10_000,
+    messages=[{
+        "role": "user",
+        "content": text
+    }]
+    )
+
+    content = message.content[0].text
+    if content is None:
+        raise RuntimeError("Output from Claude was None.")
+
+    return content
+
 def prompt_grok(text: str, model: str) -> str:
 
     client = OpenAI(
