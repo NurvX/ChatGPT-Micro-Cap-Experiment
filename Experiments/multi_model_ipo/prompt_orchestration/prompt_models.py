@@ -87,10 +87,14 @@ def prompt_deep_research(skeleton, libb) -> tuple[str, str]:
     model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
     text = create_deep_research_prompt(skeleton, libb)
         
-    if model == "deepseek":
-        return prompt_deepseek(text), text
-    elif model == "gpt-4.1":
-        return prompt_chatgpt(text), text
+    if "deepseek" in model:
+        return prompt_deepseek(text, model), text
+    elif "gpt" in model:
+        return prompt_chatgpt(text, model), text
+    elif "claude" in model:
+        return prompt_claude(text, model), text
+    elif "grok" in model:
+        return prompt_grok(text, model), text
     else:
         raise RuntimeError(f"Unidentified model: {model}")
 
@@ -98,10 +102,14 @@ def prompt_daily_report(skeleton, libb) -> tuple[str, str]:
 
     model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
     text = create_daily_prompt(skeleton, libb)
-    if model == "deepseek":
-        return prompt_deepseek(text), text
-    elif model == "gpt-4.1":
-        return prompt_chatgpt(text), text
+    if "deepseek" in model:
+        return prompt_deepseek(text, model), text
+    elif "gpt" in model:
+        return prompt_chatgpt(text, model), text
+    elif "claude" in model:
+        return prompt_claude(text, model), text
+    elif "grok" in model:
+        return prompt_grok(text, model), text
     else:
         raise RuntimeError(f"Unidentified model: {model}")
     
@@ -109,9 +117,14 @@ def prompt_starting_report(prompt: str, libb: LIBBmodel):
 
     model = libb._model_path.replace("multi_model_ipo/artifacts/", "")
 
-    if model == "deepseek":
-        return prompt_deepseek(prompt)
-    elif model == "gpt-4.1":
-        return prompt_chatgpt(prompt)
+    if "deepseek" in model:
+        return prompt_deepseek(prompt, model)
+    elif "gpt" in model:
+        return prompt_chatgpt(prompt, model)
+    elif "claude" in model:
+        return prompt_claude(prompt, model)
+    elif "grok" in model:
+        return prompt_grok(prompt, model)
+
     else:
         raise RuntimeError(f"Unidentified model: {model}")
