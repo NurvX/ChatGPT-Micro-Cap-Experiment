@@ -4,40 +4,63 @@ import time
 from datetime import date
 import requests
 import yfinance as yf
+from threading import Lock
 
 from .utilities import *
 from .config import *
+
+FMP_LOCK = Lock()
+
+_fmp_rate_limit_until = 0.0
 
 def _request_json(
     url: str,
     params: dict,
     api_key: str | None,
+    max_retries: int = 3,
 ) -> dict | list | None:
+
+    global _fmp_rate_limit_until
 
     if not api_key:
         return None
 
     params = dict(params)
-
-
     params.setdefault("apikey", api_key)
-    
-    try:
 
-        resp = session.get(url, params=params)
+    for attempt in range(max_retries):
+        # honor any active rate limit window
+        with FMP_LOCK:
+            wait = _fmp_rate_limit_until - time.time()
+            if wait > 0:
+                time.sleep(wait)
 
-        if resp.status_code == 404:
+        try:
+            resp = session.get(url, params=params, timeout=REQUEST_TIMEOUT)
+
+            if resp.status_code == 429:
+                retry_after = int(resp.headers.get("Retry-After", 60))
+                print(f"[429] Rate limited. Waiting {retry_after}s (attempt {attempt + 1}/{max_retries})")
+                with FMP_LOCK:
+                    _fmp_rate_limit_until = time.time() + retry_after
+                time.sleep(retry_after)
+                continue
+
+            if resp.status_code == 404:
+                return None
+
+            resp.raise_for_status()
+            return resp.json()
+
+        except requests.RequestException:
+            if attempt == max_retries - 1:
+                return None
+            time.sleep(2 ** attempt)  # exponential backoff on other errors
+
+        except ValueError:
             return None
 
-        resp.raise_for_status()
-
-        return resp.json()
-
-    except requests.RequestException:
-        return None
-
-    except ValueError:
-        return None
+    return None
 
 
 # =========================================================
